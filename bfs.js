@@ -82,6 +82,7 @@ class UIManager {
 
                 // Add a click event listener to each cell
                 cell.addEventListener('click', function() {
+                    self.removeKnight();
                     const row = this.getAttribute('data-row');
                     const col = this.getAttribute('data-col');
                     self.pressedCoords.push([Number(row), Number(col)]);
@@ -156,6 +157,15 @@ class UIManager {
 
         // Start the animation by moving to the first position
         moveKnight(0);
+        this.removeKnight();
+    }
+
+    // remove the knight from the board
+    removeKnight() {
+        let knight = document.querySelector('.knight');
+        if (knight) {
+            knight.classList.remove('knight');
+        }
     }
 
 }
