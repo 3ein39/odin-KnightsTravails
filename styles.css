@@ -27,3 +27,31 @@ body {
 .black {
     background-color: #333; /* Dark color for black squares */
 }
+
+.highlight {
+/*    red color with opacity*/
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+
+.knight {
+    /* You can customize these styles to achieve the desired appearance */
+    width: 40px;
+    height: 40px;
+    background-color: #000; /* Knight's color */
+    border-radius: 50%; /* Makes the knight look round */
+    position: relative;
+    margin: auto;
+}
+
+.knight::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background-color: #fff; /* White head */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

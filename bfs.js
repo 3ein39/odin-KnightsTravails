@@ -62,8 +62,10 @@ class UIManager {
     constructor() {
         this.chessboard = document.querySelector('.chessboard');
         this.createChessBoard();
+        this.pressedCoords = [];
     }
     createChessBoard() {
+        let self = this;
         // Create 8 rows
         for (let i = 0; i < 8; i++) {
             const row = document.createElement('div');
@@ -77,11 +79,28 @@ class UIManager {
                 cell.setAttribute('data-row', i);
                 cell.setAttribute('data-col', j);
 
+
                 // Add a click event listener to each cell
                 cell.addEventListener('click', function() {
                     const row = this.getAttribute('data-row');
                     const col = this.getAttribute('data-col');
-                    console.log(`Clicked cell at row ${row}, column ${col}`);
+                    self.pressedCoords.push([Number(row), Number(col)]);
+                    cell.classList.toggle('highlight')
+
+                    if (self.pressedCoords.length === 2) {
+                        let a1 = bfs({ x: self.pressedCoords[0][0], y: self.pressedCoords[0][1] }, { x: self.pressedCoords[1][0], y: self.pressedCoords[1][1] });
+                        console.log(a1);
+                        self.pressedCoords = [];
+
+                        self.play(a1);
+
+                        // remove highlight
+                        let highlighted = document.querySelectorAll('.highlight');
+                        highlighted.forEach((cell) => {
+                            cell.classList.remove('highlight');
+                        });
+                    }
+                    // console.log(`Clicked cell at row ${row}, column ${col}`);
                 });
 
                 // Alternate the color of cells
@@ -97,6 +116,48 @@ class UIManager {
             this.chessboard.appendChild(row);
         }
     }
+
+    // animate the path
+    play(path) {
+        // remove the last dot from the path
+        path = path.substring(0, path.length - 1);
+        // Split the path string into an array of coordinates
+        const coordinates = path.split('.').map(coord => {
+            const [x, y] = coord.substring(1, coord.length - 1).split(',').map(Number);
+            return { x, y };
+        });
+
+        // Function to move the knight to the next position with animation
+        const moveKnight = (index) => {
+            if (index >= coordinates.length) {
+                // Animation complete
+                return;
+            }
+
+            const { x, y } = coordinates[index];
+            const cell = document.querySelector(`.cell[data-row="${x}"][data-col="${y}"]`);
+
+            // Add a class for styling to indicate the knight's position
+            cell.classList.add('knight');
+
+            // Delay the next move for 500 milliseconds (adjust as needed)
+            setTimeout(() => {
+                // Remove the knight class from the previous cell
+                if (index > 0) {
+                    const prevCoordinate = coordinates[index - 1];
+                    const prevCell = document.querySelector(`.cell[data-row="${prevCoordinate.x}"][data-col="${prevCoordinate.y}"]`);
+                    prevCell.classList.remove('knight');
+                }
+
+                // Move to the next position
+                moveKnight(index + 1);
+            }, 700); // Adjust the delay time as needed
+        };
+
+        // Start the animation by moving to the first position
+        moveKnight(0);
+    }
+
 }
 
 // Create a new instance of the UIManager class
