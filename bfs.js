@@ -14,7 +14,7 @@ const directions = [
 function bfs(src, target) {
     // create a queue and enqueue first cell
     let q = [];
-    q.push({ x: src.x, y: src.y, path: `(${src.x},${src.y})` });
+    q.push({ x: src.x, y: src.y, path: `(${src.x},${src.y}).` });
 
     // create a set to avoid cycles
     let visited = new Set();
@@ -37,7 +37,7 @@ function bfs(src, target) {
             // if reachable state is not yet visited and inside board, push that state into queue
             if (isInsideBoard(x, y) && !visited.has(x + y * 8)) {
                 visited.add(x + y * 8);
-                q.push({ x, y, path: curr.path + `(${x},${y})` });
+                q.push({ x, y, path: curr.path + `(${x},${y}).` });
             }
         }
     }
