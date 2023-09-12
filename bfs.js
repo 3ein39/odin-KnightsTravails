@@ -55,3 +55,49 @@ function isInsideBoard(x, y) {
 // testing bfs
 let a1 = bfs({ x: 0, y: 0 }, { x: 3, y: 3 });
 console.log(a1); // (0,0)(2,1)(3,3)
+
+
+// UIManager
+class UIManager {
+    constructor() {
+        this.chessboard = document.querySelector('.chessboard');
+        this.createChessBoard();
+    }
+    createChessBoard() {
+        // Create 8 rows
+        for (let i = 0; i < 8; i++) {
+            const row = document.createElement('div');
+            row.classList.add('row');
+
+            // Create 8 cells in each row
+            for (let j = 0; j < 8; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                // Add a unique identifier to each cell based on its row and column
+                cell.setAttribute('data-row', i);
+                cell.setAttribute('data-col', j);
+
+                // Add a click event listener to each cell
+                cell.addEventListener('click', function() {
+                    const row = this.getAttribute('data-row');
+                    const col = this.getAttribute('data-col');
+                    console.log(`Clicked cell at row ${row}, column ${col}`);
+                });
+
+                // Alternate the color of cells
+                if ((i + j) % 2 === 0) {
+                    cell.classList.add('white');
+                } else {
+                    cell.classList.add('black');
+                }
+
+                row.appendChild(cell);
+            }
+
+            this.chessboard.appendChild(row);
+        }
+    }
+}
+
+// Create a new instance of the UIManager class
+const uiManager = new UIManager();
